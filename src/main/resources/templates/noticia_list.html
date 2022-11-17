@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.themeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+
+
+    <div class="container m-5">
+        <table class="table table-success table-striped-columns">
+            <thead>
+                <tr align="center">
+                    <th colspan="5"><h2>NOTICIAS</h2></th>
+                </tr>
+                <tr align="center">
+                    <th scope="col">Título</th>
+
+                    <!-- En lugar de "Cuerpo" va la foto de la noticia -->
+                    <th scope="col">Cuerpo</th>
+                    <th colspan="3" scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <!-- Dentro del "tbody" vamos a hacer la iteracion con th:each -->
+            <tbody th:each="noticia : ${noticias}">
+                <tr align="center">
+                    <th scope="row" th:text="${noticia.titulo}"></th>
+
+                    <!-- En lugar del "Cuerpo" va la foto de la noticia -->
+                    <td th:text="${noticia.cuerpo}"></td>
+                    <td>
+                        <a th:href="@{/noticia/mostrar/__${noticia.id}__}">Ver</a>
+                    </td>
+                    <td th:href="@{noticia/modificar/}">Modificar</td>
+                    <td>Eliminar</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.themeleaf.org">
+    
+    <head>
+        <!-- "ruta del fragmento" :: "etiqueta a la que reemplazamos" -->
+        th:repace= "/fragments/head :: head"
+    </head>
+    
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                
+                <div class="container">
+                  <a class="navbar-brand" href="#">
+                    <img src="https://cdn-icons-png.flaticon.com/512/21/21601.png" width="70px" height="70px" alt="Noticias">
+                  </a>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mx-auto me-2">
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#"><h4>Ingresar</h4></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" href="#"><h4>Registrate</h4></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+            </nav>
+        </header>
+        
+
+
+
+        <!-- Bloque "div" capta los errores y los muestra en pantalla -->
+        <div th:if="${error != null}" class="card text-white bg-danger mb-3 mensajeError">
+            <div class="card-body">
+                <h5 class="card-tittle">Error! &#128078;</h5>
+                <p class="card-text" th:text="${error}"></p>
+            </div>
+        </div>
+
+        <!-- Bloque "div" capta los errores y los muestra en pantalla -->
+        <div th:if="${exito != null}" class="card text-white bg-success mb-3 mt-3 mensaje">
+            <div class="card-body">
+                <h5 class="card-tittle">Exito!</h5>
+                <p class="card-text" th:text="${exito}"></p>
+            </div>
+        </div>
+
+    </body>
+</html>

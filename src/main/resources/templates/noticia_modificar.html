@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.themeleaf.org">
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    </head>
+    <body>
+
+        <header>
+            <div class="">
+                <h2>Modificá la notica aquí:</h2>
+            </div>
+        </header>
+        
+        <div class="container">
+
+            <!-- Con "action usamos thymeleaf ya que bamos a usar una variable de preprocesamiento, quiere decir que lee
+                primero esta variable y luego la ruta" -->
+            <form th:action="{/noticia/modificar/__${autor.id}__}" method="post">
+
+                <!-- Estos "div" contienen los mensajes de error, viene el mensaje de "modelo" de noticiaControlador(Java), si en el 
+                modelo existe una variable error que se está inyectando lo vamos a mostrar en este "div" -->
+
+                <!-- Thymeleaf tiene para envio de variables una sintaxis particular que es a través del simbolo "$" -->
+
+                <!-- Para que lo de abajo no arroje error le debemos avisar a la plantilla que vamos a utilizar Thymeleaf
+                En la etiqueta html agregamos   xmlns:th="http://www.themeleaf.org" -->
+
+                <div th:if="${error != null}" class="card text-white bg-danger mb-3 mensajeError">
+                    <div class="card-body">
+                        <h5 class="card-tittle">Error! &#128078;</h5>
+                        <p class="card-text" th:text="${error}"></p>
+                    </div>
+                </div>
+
+                <div th:if="${exito != null}" class="card text-white bg-success mb-3 mt-3 mensaje">
+                    <div class="card-body">
+                        <h5 class="card-tittle">Exito!</h5>
+                        <p class="card-text" th:text="${exito}"></p>
+                    </div>
+                </div>
+
+                
+                <!-- DATOS A COMPLETAR EN EL FORMULARIO -->
+
+                <!-- Para que viaje el id oculto usamos "hidden". Va a existir un "input de id pero no lo vamos a ver" -->
+                <input  hidden th:value="${id}" name="id">
+
+                <div class="form-group">
+                    <!-- el nombre del atributo name tiene que coincidir con el nombre que llega como parámetro al controlador -->
+                    <input th:value="${noticia.titulo}" type="text" name="titulo" placeholder="Título de la noticia" class="form-group">
+                </div>
+                <div class="form-group">
+                    <textarea th:value="${noticia.cuerpo}" id="mensaje" cols="30" rows="10" name="cuerpo" placeholder="Cuerpo de la noticia" class="form-group"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Actualizar</button>            
+             
+                
+            </form>
+        </div>
+        
+
+
+    </body>
+</html>
