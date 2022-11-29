@@ -1,8 +1,10 @@
 
 package com.egg.news.servicios;
 
+import com.egg.news.entidades.Periodista;
 import com.egg.news.entidades.noticia;
 import com.egg.news.excepciones.MiExcepcion;
+import com.egg.news.repositorios.PeriodistaRepositorio;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.egg.news.repositorios.noticiaRepositorio;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 
 @Service
@@ -19,9 +23,14 @@ public class noticiaServicio {
     @Autowired
     noticiaRepositorio noticiaRepositorio;
     
+    @Autowired
+    PeriodistaRepositorio periodistaRepositorio;
+    
     //CREAR
     @Transactional
-    public void crearNoticia(String titulo, String cuerpo) throws MiExcepcion{
+    public void crearNoticia(String titulo, String cuerpo, String idPeriodista) throws MiExcepcion{
+        
+        Periodista periodista = periodistaRepositorio.findById(idPeriodista).get();
         
         validar(titulo, cuerpo);
         
@@ -30,6 +39,7 @@ public class noticiaServicio {
         noticia.setAlta(new Date());
         noticia.setTitulo(titulo);
         noticia.setCuerpo(cuerpo);
+        noticia.setCreador(periodista);
         
         noticiaRepositorio.save(noticia); //save recive una entidad por parámetro y la persiste en la DATA BASE
     }
@@ -42,12 +52,15 @@ public class noticiaServicio {
         
         noticias = noticiaRepositorio.findAll(); //findAll trae todos las noticias de DATA BASE
         
+        //Para ordenar fué necesario crear el método abstracto "compareTo" en la entidad noticia
+        Collections.sort(noticias);
+        
         
         return noticias;
     }
     
     @Transactional
-    public void modificar(Integer id, String titulo, String cuerpo) throws MiExcepcion{
+    public void modificar(String id, String titulo, String cuerpo) throws MiExcepcion{
         
         validar(titulo, cuerpo);
         
@@ -72,7 +85,12 @@ public class noticiaServicio {
         return noticiaRepositorio.getOne(id);
     }
     
-  
+    
+    @Transactional
+    public void eliminar(String id) throws MiExcepcion{
+        noticiaRepositorio.deleteById(id);
+    }
+    
     
     //VALIDAR
     private void validar(String titulo, String cuerpo) throws MiExcepcion{

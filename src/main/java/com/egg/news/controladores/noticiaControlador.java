@@ -1,17 +1,15 @@
 
 package com.egg.news.controladores;
 
+import com.egg.news.entidades.Periodista;
 import com.egg.news.entidades.noticia;
 import com.egg.news.excepciones.MiExcepcion;
 import com.egg.news.servicios.noticiaServicio;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +24,7 @@ public class noticiaControlador {
     private noticiaServicio notServ;
     
     @GetMapping("/registrar") //URL: localhost:8080/noticia/registrar
-    public String registrar(){
+    public String registrar(ModelMap modelo){
         return "noticia_form.html";
     }
     
@@ -40,12 +38,13 @@ public class noticiaControlador {
     //Para indicarle al controlador que éste es un parámetro que va a viajar en la URL lo marcamos 
     //con un @RequestParam. Hace que sea un parámetro requerido
     //Mediante "modelo" inyecto los mensajes de error para que los vea el usuario
-    public String registro(@RequestParam String titulo, @RequestParam String cuerpo, ModelMap modelo){
+    public String registro(@RequestParam String titulo, @RequestParam String cuerpo, @RequestParam String creador, ModelMap modelo){
         
         try {
             
-            notServ.crearNoticia(titulo, cuerpo);
+            notServ.crearNoticia(titulo, cuerpo, creador);
             modelo.put("exito", "La noticia fué creada correctamente");
+           
             
         } catch (MiExcepcion ex) {
             
@@ -54,7 +53,7 @@ public class noticiaControlador {
             return "noticia_form.html";
         }
         
-        return "index.html";
+         return "inicio.html";
     }
     
     @GetMapping("/lista")
@@ -84,12 +83,42 @@ public class noticiaControlador {
     //PathVariable. Esta anotación indica que este valor determinado va a viajar a través de un Path, es decir
     //a través de un fragmento de la URL en el que se encuentra determinado recurso
     //A través de la URL enviamos determinado recurso, es este caso el "id"
+    
+    
     @GetMapping("/modificar/{id}")
-    public String modificar(@PathVariable String id, ModelMap modelo ){
+    public String modificar(@PathVariable String id, ModelMap modelo){
         modelo.put("noticia", notServ.getOne(id));
         
         return "noticia_modificar.html";
     }
     
+    
+    @PostMapping("/modificar/{id}")
+    public String modificar(@PathVariable String id, String titulo, String cuerpo, ModelMap modelo){
+        try {
+            notServ.modificar(id, titulo, cuerpo);
+            
+            return "redirect:../lista";
+        } catch (MiExcepcion ex) {
+            modelo.put("error", ex.getMessage());
+            
+            return "noticia_modificar.html";
+        }
+    }
+    
+    @GetMapping("/eliminar/{id}")
+    public String eliminar(@PathVariable String id, ModelMap modelo){
+        try {
+            notServ.eliminar(id);
+            //modelo.put("exito", "La noticia fué eliminada correctamente");
+            return "redirect:../lista";
+        } catch (MiExcepcion ex) {
+            //modelo.put("error", ex.getMessage());
+                    
+            return "redirect:../lista";
+        }
+        
+        
+    }
     
 }

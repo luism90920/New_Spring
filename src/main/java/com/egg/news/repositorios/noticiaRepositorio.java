@@ -17,6 +17,7 @@ public interface noticiaRepositorio extends JpaRepository<noticia, String>{
 //    @Query("SELECT n FROM noticia WHERE n.cuerpo like '%cuerpo%'")
 //    public Noticia buscarPorCuerpo (@Param("cuerpo") String cuerpo);
 
+    @Override
     public noticia getOne(String id);
 
     public Optional<noticia> findById(Integer id);
